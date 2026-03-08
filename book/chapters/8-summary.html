@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="uk" xml:lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Alexey Spasyonkin" />
+  <meta name="dcterms.date" content="2026-01-01" />
+  <meta name="description" content="Приклад книги, побудованої за допомогою Pandoc. Доступна онлайн, у форматах EPUB та PDF." />
+  <title>Підсумок: Ключові ідеї</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ── Two-column layout ── */
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.6;
+    }
+
+    #page-wrapper {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 280px;
+      min-width: 220px;
+      flex-shrink: 0;
+      background: #f5f5f0;
+      border-right: 1px solid #ddd;
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    #sidebar-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+      margin: 0 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #sidebar-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    #sidebar-title a:hover { color: #1a1a1a; }
+
+    #sidebar nav#TOC ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #sidebar nav#TOC > ul { padding: 0; }
+
+    #sidebar nav#TOC ul li {
+      margin: 0;
+      padding: 0;
+    }
+
+    #sidebar nav#TOC > ul > li {
+      margin-bottom: 0.15rem;
+    }
+
+    #sidebar nav#TOC a {
+      display: block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      transition: background 0.15s;
+    }
+
+    #sidebar nav#TOC a:hover {
+      background: #e8e8e0;
+      color: #000;
+    }
+
+    /* Sub-items (H2 inside chapter) */
+    #sidebar nav#TOC ul ul {
+      padding-left: 1rem;
+    }
+
+    #sidebar nav#TOC ul ul a {
+      font-size: 0.82rem;
+      color: #555;
+      padding: 0.15rem 0.5rem;
+    }
+
+    #sidebar nav#TOC ul ul a:hover {
+      color: #000;
+    }
+
+    /* ── Download links ── */
+    #sidebar-downloads {
+      margin-top: 1.2rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid #ccc;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    #sidebar-downloads a {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35em;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      background: #fff;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    #sidebar-downloads a:hover {
+      background: #e8e8e0;
+      border-color: #999;
+      color: #000;
+    }
+
+    #sidebar-downloads a:visited {
+      color: #333;
+    }
+
+    /* ── Main content ── */
+    #main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2rem 3rem;
+      max-width: 48rem;
+    }
+
+    /* ── Top nav (Prev / Next) ── */
+    nav#sitenav {
+      margin-bottom: 2rem;
+    }
+
+    div.sitenav { display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+    span.navlink { flex: 1; }
+    span.navlink-label { display: inline-block; min-width: 4em; color: #888; font-size: 0.85rem; }
+    nav#sitenav a { color: #555; text-decoration: none; font-size: 0.9rem; }
+    nav#sitenav a:hover { color: #000; text-decoration: underline; }
+
+    /* ── Typography ── */
+    p { margin: 1em 0; }
+    a { color: #2a6496; }
+    a:visited { color: #2a6496; }
+    img { max-width: 100%; }
+    svg { height: auto; max-width: 100%; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; line-height: 1.3; }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+    h5, h6 { font-size: 1em; font-style: italic; }
+    h6 { font-weight: normal; }
+
+    ol, ul { padding-left: 1.7em; margin-top: 1em; }
+    li > ol, li > ul { margin-top: 0; }
+
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 3px solid #ccc;
+      color: #555;
+    }
+
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+      background: #f4f4f4;
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1em;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode { background-color: transparent; overflow: visible; }
+
+    hr { border: none; border-top: 1px solid #ddd; height: 1px; margin: 1.5em 0; }
+
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption { margin-bottom: 0.75em; }
+    tbody { margin-top: 0.5em; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+    th { border-top: 1px solid #1a1a1a; padding: 0.25em 0.5em; }
+    td { padding: 0.125em 0.5em 0.25em 0.5em; }
+
+    header#title-block-header { margin-bottom: 3em; }
+    header#title-block-header h1.title { font-size: 2.2rem; border: none; }
+    .subtitle { color: #555; font-style: italic; margin-top: -0.5em; }
+    .author { color: #555; }
+    .date { color: #888; font-size: 0.9rem; }
+
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+    /* ── Syntax highlighting ── */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line);
+      position: relative; left: -1em; text-align: right; vertical-align: baseline;
+      border: none; display: inline-block;
+      -webkit-touch-callout: none; -webkit-user-select: none;
+      -khtml-user-select: none; -moz-user-select: none;
+      -ms-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+
+    /* ── Mobile: hamburger + collapsible sidebar ── */
+    #sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 200;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 700px) {
+      #sidebar-toggle { display: block; }
+
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+      }
+
+      #sidebar.open { transform: translateX(0); }
+
+      #main-content {
+        padding: 1rem;
+        padding-top: 3rem;
+      }
+
+      h1 { font-size: 1.4rem; }
+    }
+
+    @media print {
+      #sidebar, #sidebar-toggle { display: none; }
+      #main-content { max-width: 100%; padding: 0; }
+      html { background-color: white; }
+      body { background-color: transparent; color: black; font-size: 12pt; }
+      p, h2, h3 { orphans: 3; widows: 3; }
+      h2, h3, h4 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<button id="sidebar-toggle" aria-label="Toggle table of contents" onclick="toggleSidebar()">☰</button>
+
+<div id="page-wrapper">
+  <aside id="sidebar">
+    <p id="sidebar-title"><a href="../index.html">Життя без онанізму 7.0
+(ЖБО 7.0)</a></p>
+    <nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="1-preface.html#preface" id="toc-preface">Передмова</a>
+<ul>
+<li><a href="1-preface.html#що-ви-знайдете-в-цій-книзі"
+id="toc-що-ви-знайдете-в-цій-книзі">Що ви знайдете в цій книзі</a></li>
+<li><a href="1-preface.html#головна-ідея" id="toc-головна-ідея">Головна
+ідея</a></li>
+</ul></li>
+<li><a href="2-chapter-01.html#chapter-01" id="toc-chapter-01">Логіка,
+схема і вихід</a></li>
+<li><a href="3-chapter-02.html#chapter-02" id="toc-chapter-02">Вибухаючи
+замки в хмарах</a></li>
+<li><a href="4-chapter-03.html#chapter-03"
+id="toc-chapter-03">Перевертаючи гру</a></li>
+<li><a href="5-chapter-04.html#chapter-04" id="toc-chapter-04">Ода
+мастурбації</a></li>
+<li><a href="6-chapter-05.html#chapter-05" id="toc-chapter-05">Чесна
+глава</a></li>
+<li><a href="7-chapter-06.html#chapter-06" id="toc-chapter-06">Скільки
+бажаєте</a></li>
+<li><a href="8-summary.html#summary" id="toc-summary">Підсумок: Ключові
+ідеї</a>
+<ul>
+<li><a href="8-summary.html#передмова"
+id="toc-передмова">Передмова</a></li>
+<li><a href="8-summary.html#розділ-1-логіка-схема-і-вихід"
+id="toc-розділ-1-логіка-схема-і-вихід">Розділ 1: Логіка, схема і
+вихід</a></li>
+<li><a href="8-summary.html#розділ-2-вибухаючи-замки-в-хмарах"
+id="toc-розділ-2-вибухаючи-замки-в-хмарах">Розділ 2: Вибухаючи замки в
+хмарах</a></li>
+<li><a href="8-summary.html#розділ-3-перевертаючи-гру"
+id="toc-розділ-3-перевертаючи-гру">Розділ 3: Перевертаючи гру</a></li>
+<li><a href="8-summary.html#розділ-4-ода-мастурбації"
+id="toc-розділ-4-ода-мастурбації">Розділ 4: Ода мастурбації</a></li>
+<li><a href="8-summary.html#розділ-5-чесна-глава"
+id="toc-розділ-5-чесна-глава">Розділ 5: Чесна глава</a></li>
+<li><a href="8-summary.html#розділ-6-скільки-бажаєте"
+id="toc-розділ-6-скільки-бажаєте">Розділ 6: Скільки бажаєте</a></li>
+</ul></li>
+</ul>
+    </nav>
+    <div id="sidebar-downloads">
+      <a href="../../downloads/book.epub" download>&#x2B07; EPUB</a>
+      <a href="../../downloads/book.pdf" download>&#x2B07; PDF</a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <nav id="sitenav">
+    <div class="sitenav">
+    <span class="navlink">
+        <span class="navlink-label">↑ Up:</span> <a href="../index.html" accesskey="u" rel="up">Життя без онанізму 7.0 (ЖБО 7.0)</a>
+        </span>
+    </div>
+    <div class="sitenav">
+    <span class="navlink">
+        <span class="navlink-label">← Prev:</span> <a href="7-chapter-06.html" accesskey="p" rel="previous">Скільки бажаєте</a>
+        </span>
+    <span class="navlink" style="text-align:right">
+        </span>
+    </div>
+    </nav>
+
+
+<h1 data-number="8" id="summary">Підсумок: Ключові ідеї</h1>
+<h2 data-number="8.1" id="передмова">Передмова</h2>
+<ul>
+<li><strong>Реалістичний підхід:</strong> Книга пропонує практичну
+методику, яка не базується на недосяжних ідеалах, а розглядає фізіологію
+та реальні причини залежності.</li>
+<li><strong>Головна теза:</strong> Онанізм не є причиною поганого життя;
+навпаки, погане життя — це причина онанізму. Це лише спроба заглушити
+внутрішній біль.</li>
+<li><strong>Шлях до змін:</strong> Щоб позбутися залежності, потрібно
+насамперед працювати над рівнем особистого щастя.</li>
+</ul>
+<h2 data-number="8.2" id="розділ-1-логіка-схема-і-вихід">Розділ 1:
+Логіка, схема і вихід</h2>
+<ul>
+<li><strong>Ефект Куліджа:</strong> Сучасні технології дозволяють щоразу
+обирати нову «партнерку» через відео, що спричиняє викид величезної
+кількості гормонів, як при груповому сексі.</li>
+<li><strong>Знищення рецепторів:</strong> Надмірні дози гормонів
+випалюють рецептори мозку, через що реальне життя стає сірим, нудним і
+нецікавим.</li>
+<li><strong>Зв’язок із якістю життя:</strong> Чим гірші умови життя та
+вищий рівень стресу, тим більше людина вдається до наркотичних засобів
+(зокрема й онанізму), щоб довести свій стан до рівня «нормально».</li>
+<li><strong>Духовний рівень:</strong> Високий духовний рівень (розуміння
+світу та філософський підхід) дозволяє отримувати задоволення навіть із
+важких обставин, зменшуючи потребу в «допінгах».</li>
+<li><strong>Формула свободи:</strong> Поєднання високої якості життя та
+високого духовного рівня робить людину вільною від будь-яких
+залежностей.</li>
+</ul>
+<h2 data-number="8.3" id="розділ-2-вибухаючи-замки-в-хмарах">Розділ 2:
+Вибухаючи замки в хмарах</h2>
+<ul>
+<li><strong>Фізіологічна неминучість:</strong> Повна відмова від
+еякуляції для звичайної людини (не ченця) є майже неможливою та
+призводить до зростання внутрішньої напруги через 10–20 днів
+утримання.</li>
+<li><strong>Ідеальна ціль:</strong> Прагнути не до «нуля», а до
+стабільних стосунків із дружиною та рідкісних випадків онанізму.</li>
+<li><strong>Раціональність:</strong> Іноді краще вдатися до онанізму,
+щоб зняти критичну напругу, ніж руйнувати сімейні стосунки надмірною
+наполегливістю чи страждати від «перегріву» системи.</li>
+<li><strong>Секс проти онанізму:</strong> Секс із постійним партнером не
+виснажує рецептори так, як порнографія, і є фізично корисним.</li>
+</ul>
+<h2 data-number="8.4" id="розділ-3-перевертаючи-гру">Розділ 3:
+Перевертаючи гру</h2>
+<ul>
+<li><strong>Психологічний рятувальний круг:</strong> Онанізм часто
+використовується як засіб боротьби зі смутком, вигоранням та
+самотністю.</li>
+<li><strong>Вплив статусу:</strong> Молоді чоловіки частіше вдаються до
+мастурбації, бо їхнє життя об’єктивно важче, а соціальний статус
+нижчий.</li>
+<li><strong>Два завдання для вирішення проблеми:</strong>
+<ol type="1">
+<li>Створити якісне особисте життя для регулярного реального сексу.</li>
+<li>Підняти загальну якість життя до рівня, де не потрібно «доганятися»
+наркотиками для гарного настрою.</li>
+</ol></li>
+<li><strong>Поступовий прогрес:</strong> Успіх вимірюється не миттєвим
+припиненням, а поступовим зменшенням кількості актів з року в рік.</li>
+</ul>
+<h2 data-number="8.5" id="розділ-4-ода-мастурбації">Розділ 4: Ода
+мастурбації</h2>
+<ul>
+<li><strong>Аварійний клапан:</strong> Онанізм — це вбудований у тіло
+механізм захисту психіки від перевантаження.</li>
+<li><strong>Робота з причиною, а не наслідком:</strong> Не потрібно
+боротися з самим бажанням (клапаном), потрібно працювати над тим, щоб у
+системі не виникало надлишкового тиску.</li>
+<li><strong>Цикли продуктивності:</strong> Найвища працездатність
+досягається при середньому тиску (приблизно на 7-й день утримання).
+Надвисокий тиск (після 10–14 днів) стає контрпродуктивним.</li>
+<li><strong>Мотивація для самотніх:</strong> Стан «під парами»
+(утримання) можна використовувати як енергію для пошуку партнерки.</li>
+</ul>
+<h2 data-number="8.6" id="розділ-5-чесна-глава">Розділ 5: Чесна
+глава</h2>
+<ul>
+<li><strong>Чесне визнання:</strong> Навіть при наявності сексу, онанізм
+іноді залишатиметься, бо він пропонує віртуальну різноманітність, якої
+немає в реальності.</li>
+<li><strong>Мета — «рідше»:</strong> Завдання «менше займатися
+онанізмом» є адекватним і дає реальні результати, на відміну від спроб
+повної заборони.</li>
+<li><strong>Вбудована функція:</strong> На відміну від алкоголю,
+еякуляція — це природна потреба організму скидати надлишки рідини.</li>
+<li><strong>Щастя як ліки:</strong> Потрібно ставати менш нещасним, тоді
+онанізм залишиться лише як рідкісна фізіологічна відсічка (раз на 10
+днів або рідше).</li>
+</ul>
+<h2 data-number="8.7" id="розділ-6-скільки-бажаєте">Розділ 6: Скільки
+бажаєте</h2>
+<ul>
+<li><strong>Дозвіл на «ліки»:</strong> Якщо життя зараз занадто важке,
+не варто себе картати за онанізм — це токсичні, але необхідні ліки для
+виживання психіки.</li>
+<li><strong>Джерела щастя:</strong> Для зниження потреби в «допінгах»
+автор радить:
+<ul>
+<li>Насичені стосунки (друзі, спільноти).</li>
+<li>Фізичну активність та контакт із природою.</li>
+<li>Працю на благо інших (добрі справи дають справжню радість).</li>
+</ul></li>
+<li><strong>Ультрапозитивне оточення:</strong> Важливо триматися мудрих
+і позитивних людей, які розуміють закони світу і не множать
+агресію.</li>
+<li><strong>Кінцева мета:</strong> Стати настільки щасливим, щоб усі
+наркотики (від сигарет до шортсів та надмірного онанізму) відпали самі
+собою через непотрібність.</li>
+</ul>
+<hr />
+<p>Ці ідеї демонструють шлях від боротьби з симптомами до зцілення
+самого життя.</p>
+
+  </main>
+</div>
+
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  var sidebar = document.getElementById('sidebar');
+  var toggle = document.getElementById('sidebar-toggle');
+  if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== toggle) {
+    sidebar.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

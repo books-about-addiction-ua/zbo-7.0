@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="uk" xml:lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Alexey Spasyonkin" />
+  <meta name="dcterms.date" content="2026-01-01" />
+  <meta name="description" content="Приклад книги, побудованої за допомогою Pandoc. Доступна онлайн, у форматах EPUB та PDF." />
+  <title>Чесна глава</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* ── Two-column layout ── */
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.6;
+    }
+
+    #page-wrapper {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 280px;
+      min-width: 220px;
+      flex-shrink: 0;
+      background: #f5f5f0;
+      border-right: 1px solid #ddd;
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    #sidebar-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+      margin: 0 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #sidebar-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    #sidebar-title a:hover { color: #1a1a1a; }
+
+    #sidebar nav#TOC ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    #sidebar nav#TOC > ul { padding: 0; }
+
+    #sidebar nav#TOC ul li {
+      margin: 0;
+      padding: 0;
+    }
+
+    #sidebar nav#TOC > ul > li {
+      margin-bottom: 0.15rem;
+    }
+
+    #sidebar nav#TOC a {
+      display: block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      transition: background 0.15s;
+    }
+
+    #sidebar nav#TOC a:hover {
+      background: #e8e8e0;
+      color: #000;
+    }
+
+    /* Sub-items (H2 inside chapter) */
+    #sidebar nav#TOC ul ul {
+      padding-left: 1rem;
+    }
+
+    #sidebar nav#TOC ul ul a {
+      font-size: 0.82rem;
+      color: #555;
+      padding: 0.15rem 0.5rem;
+    }
+
+    #sidebar nav#TOC ul ul a:hover {
+      color: #000;
+    }
+
+    /* ── Download links ── */
+    #sidebar-downloads {
+      margin-top: 1.2rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid #ccc;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    #sidebar-downloads a {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35em;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      background: #fff;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    #sidebar-downloads a:hover {
+      background: #e8e8e0;
+      border-color: #999;
+      color: #000;
+    }
+
+    #sidebar-downloads a:visited {
+      color: #333;
+    }
+
+    /* ── Main content ── */
+    #main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 2rem 3rem;
+      max-width: 48rem;
+    }
+
+    /* ── Top nav (Prev / Next) ── */
+    nav#sitenav {
+      margin-bottom: 2rem;
+    }
+
+    div.sitenav { display: flex; flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+    span.navlink { flex: 1; }
+    span.navlink-label { display: inline-block; min-width: 4em; color: #888; font-size: 0.85rem; }
+    nav#sitenav a { color: #555; text-decoration: none; font-size: 0.9rem; }
+    nav#sitenav a:hover { color: #000; text-decoration: underline; }
+
+    /* ── Typography ── */
+    p { margin: 1em 0; }
+    a { color: #2a6496; }
+    a:visited { color: #2a6496; }
+    img { max-width: 100%; }
+    svg { height: auto; max-width: 100%; }
+    h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; line-height: 1.3; }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #eee; padding-bottom: 0.3em; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+    h5, h6 { font-size: 1em; font-style: italic; }
+    h6 { font-weight: normal; }
+
+    ol, ul { padding-left: 1.7em; margin-top: 1em; }
+    li > ol, li > ul { margin-top: 0; }
+
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 3px solid #ccc;
+      color: #555;
+    }
+
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+      background: #f4f4f4;
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 1em;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode { background-color: transparent; overflow: visible; }
+
+    hr { border: none; border-top: 1px solid #ddd; height: 1px; margin: 1.5em 0; }
+
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption { margin-bottom: 0.75em; }
+    tbody { margin-top: 0.5em; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; }
+    th { border-top: 1px solid #1a1a1a; padding: 0.25em 0.5em; }
+    td { padding: 0.125em 0.5em 0.25em 0.5em; }
+
+    header#title-block-header { margin-bottom: 3em; }
+    header#title-block-header h1.title { font-size: 2.2rem; border: none; }
+    .subtitle { color: #555; font-style: italic; margin-top: -0.5em; }
+    .author { color: #555; }
+    .date { color: #888; font-size: 0.9rem; }
+
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+    /* ── Syntax highlighting ── */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen { div.sourceCode { overflow: auto; } }
+    @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code { counter-reset: source-line 0; }
+    pre.numberSource code > span { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before {
+      content: counter(source-line);
+      position: relative; left: -1em; text-align: right; vertical-align: baseline;
+      border: none; display: inline-block;
+      -webkit-touch-callout: none; -webkit-user-select: none;
+      -khtml-user-select: none; -moz-user-select: none;
+      -ms-user-select: none; user-select: none;
+      padding: 0 4px; width: 4em; color: #aaaaaa;
+    }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+    @media screen { pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; } }
+    code span.al { color: #ff0000; font-weight: bold; }
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.at { color: #7d9029; }
+    code span.bn { color: #40a070; }
+    code span.bu { color: #008000; }
+    code span.cf { color: #007020; font-weight: bold; }
+    code span.ch { color: #4070a0; }
+    code span.cn { color: #880000; }
+    code span.co { color: #60a0b0; font-style: italic; }
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.do { color: #ba2121; font-style: italic; }
+    code span.dt { color: #902000; }
+    code span.dv { color: #40a070; }
+    code span.er { color: #ff0000; font-weight: bold; }
+    code span.fl { color: #40a070; }
+    code span.fu { color: #06287e; }
+    code span.im { color: #008000; font-weight: bold; }
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; }
+    code span.kw { color: #007020; font-weight: bold; }
+    code span.op { color: #666666; }
+    code span.ot { color: #007020; }
+    code span.pp { color: #bc7a00; }
+    code span.sc { color: #4070a0; }
+    code span.ss { color: #bb6688; }
+    code span.st { color: #4070a0; }
+    code span.va { color: #19177c; }
+    code span.vs { color: #4070a0; }
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
+
+    /* ── Mobile: hamburger + collapsible sidebar ── */
+    #sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 200;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 700px) {
+      #sidebar-toggle { display: block; }
+
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+      }
+
+      #sidebar.open { transform: translateX(0); }
+
+      #main-content {
+        padding: 1rem;
+        padding-top: 3rem;
+      }
+
+      h1 { font-size: 1.4rem; }
+    }
+
+    @media print {
+      #sidebar, #sidebar-toggle { display: none; }
+      #main-content { max-width: 100%; padding: 0; }
+      html { background-color: white; }
+      body { background-color: transparent; color: black; font-size: 12pt; }
+      p, h2, h3 { orphans: 3; widows: 3; }
+      h2, h3, h4 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<button id="sidebar-toggle" aria-label="Toggle table of contents" onclick="toggleSidebar()">☰</button>
+
+<div id="page-wrapper">
+  <aside id="sidebar">
+    <p id="sidebar-title"><a href="../index.html">Життя без онанізму 7.0
+(ЖБО 7.0)</a></p>
+    <nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="1-preface.html#preface" id="toc-preface">Передмова</a>
+<ul>
+<li><a href="1-preface.html#що-ви-знайдете-в-цій-книзі"
+id="toc-що-ви-знайдете-в-цій-книзі">Що ви знайдете в цій книзі</a></li>
+<li><a href="1-preface.html#головна-ідея" id="toc-головна-ідея">Головна
+ідея</a></li>
+</ul></li>
+<li><a href="2-chapter-01.html#chapter-01" id="toc-chapter-01">Логіка,
+схема і вихід</a></li>
+<li><a href="3-chapter-02.html#chapter-02" id="toc-chapter-02">Вибухаючи
+замки в хмарах</a></li>
+<li><a href="4-chapter-03.html#chapter-03"
+id="toc-chapter-03">Перевертаючи гру</a></li>
+<li><a href="5-chapter-04.html#chapter-04" id="toc-chapter-04">Ода
+мастурбації</a></li>
+<li><a href="6-chapter-05.html#chapter-05" id="toc-chapter-05">Чесна
+глава</a></li>
+<li><a href="7-chapter-06.html#chapter-06" id="toc-chapter-06">Скільки
+бажаєте</a></li>
+<li><a href="8-summary.html#summary" id="toc-summary">Підсумок: Ключові
+ідеї</a>
+<ul>
+<li><a href="8-summary.html#передмова"
+id="toc-передмова">Передмова</a></li>
+<li><a href="8-summary.html#розділ-1-логіка-схема-і-вихід"
+id="toc-розділ-1-логіка-схема-і-вихід">Розділ 1: Логіка, схема і
+вихід</a></li>
+<li><a href="8-summary.html#розділ-2-вибухаючи-замки-в-хмарах"
+id="toc-розділ-2-вибухаючи-замки-в-хмарах">Розділ 2: Вибухаючи замки в
+хмарах</a></li>
+<li><a href="8-summary.html#розділ-3-перевертаючи-гру"
+id="toc-розділ-3-перевертаючи-гру">Розділ 3: Перевертаючи гру</a></li>
+<li><a href="8-summary.html#розділ-4-ода-мастурбації"
+id="toc-розділ-4-ода-мастурбації">Розділ 4: Ода мастурбації</a></li>
+<li><a href="8-summary.html#розділ-5-чесна-глава"
+id="toc-розділ-5-чесна-глава">Розділ 5: Чесна глава</a></li>
+<li><a href="8-summary.html#розділ-6-скільки-бажаєте"
+id="toc-розділ-6-скільки-бажаєте">Розділ 6: Скільки бажаєте</a></li>
+</ul></li>
+</ul>
+    </nav>
+    <div id="sidebar-downloads">
+      <a href="../../downloads/book.epub" download>&#x2B07; EPUB</a>
+      <a href="../../downloads/book.pdf" download>&#x2B07; PDF</a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <nav id="sitenav">
+    <div class="sitenav">
+    <span class="navlink">
+        <span class="navlink-label">↑ Up:</span> <a href="../index.html" accesskey="u" rel="up">Життя без онанізму 7.0 (ЖБО 7.0)</a>
+        </span>
+    </div>
+    <div class="sitenav">
+    <span class="navlink">
+        <span class="navlink-label">← Prev:</span> <a href="5-chapter-04.html" accesskey="p" rel="previous">Ода мастурбації</a>
+        </span>
+    <span class="navlink" style="text-align:right">
+        <a href="7-chapter-06.html" accesskey="n" rel="next">Скільки бажаєте</a> <span class="navlink-label">:Next →</span>
+        </span>
+    </div>
+    </nav>
+
+
+<h1 data-number="6" id="chapter-05">Чесна глава</h1>
+<figure>
+<img src="../images/ch-5-img-1.png"
+alt="Маяк ВБХ - твій орієнтир у бурхливому світі" />
+<figcaption aria-hidden="true">Маяк ВБХ - твій орієнтир у бурхливому
+світі</figcaption>
+</figure>
+<p>І чи зможете ви перемогти тугу та сумнів, що змушує вас вдаватися до
+онанізму?</p>
+<p>Хлопці, скажу вам чесно, адже ЖБО 7.0 - це чесна версія, для когось
+непристойно чесна, без купюр.</p>
+<p>Ні, ви не зможете.</p>
+<p>Все одно будуть моменти, хай навіть ви матимете якісний секс, багато
+займатиметеся спортом, у вас буде легка робота, високий статус - все
+одно ви іноді займатиметеся онанізмом.</p>
+<p>Чому?</p>
+<p>Та тому що жоден секс не зрівняється з онанізмом.</p>
+<p>Онанізм крутіший, веселіший, жвавіший.</p>
+<p>Адже жодна реальність не дасть вам можливості змінювати двадцять,
+тридцять партнерів за раз.</p>
+<p>Обирати їх з нескінченного каталогу, де вся плата - десять секунд
+перегляду реклами, а якщо ви боярин і сидите на платній підписці - то й
+без неї взагалі.</p>
+<p>Переживати будь-які сюжети, втілення яких у реальності легко могло б
+привести вас на лаву підсудних або до розборок.</p>
+<p>І коли ми порівнюємо онанізм з сексом, особливо - з сексом сімейної
+людини, яка вже в шлюбі десять років, а то й двадцять, то там навіть
+ловити нічого - онанізм вестиме з рахунком п’ять до одного.</p>
+<p>І грубо кажучи, чутливі та ніжні закрийте очі й вуха - сімейна людина
+не може натрахатися.</p>
+<p>Вона всю дорогу як на півшишки засажує.</p>
+<p>І це поступово накопичує в ній напругу, і в чоловіків, і в жінок.</p>
+<p>Тому що правильно сказав Сатья Дас - сексуальної гармонії на довгому
+проміжку часу не буває.</p>
+<p>Одному треба багато - другому мало.</p>
+<p>А потім одному треба мало - другому захотілося багато.</p>
+<p>Точки перетину, зрозуміла річ - бувають.</p>
+<p>Але це просто сльози, п’ять, сім, десять років сексуальної гармонії
+на тлі всього життя губяться.</p>
+<p>Навіть не беручи в огляд вагітності, пологи чи взагалі сценарії
+тривалої виснажливої хвороби.</p>
+<p>І багато, звісно, йдуть шляхом розлучень, укладення повторних шлюбів,
+з надією на те, що там усе налагодиться.</p>
+<p>Але я навіть серйозно цей варіант не розглядаю, він просто мимо
+однозначно.</p>
+<p>І тому давайте одразу просто приймемо за аксіому - навіть якщо у вас
+буде сімейне життя, і всередині нього все буде гаразд з сексом,
+наскільки це взагалі реально навіть при високих духовних рівнях, все
+одно онанізм іноді буде у вашому житті присутній.</p>
+<p>І навіть якщо його немає - то краще б він був.</p>
+<p>Тому що вся ця система не може бути зовсім ідеально відлагоджена -
+бувають моменти туги, розпачу, слабкості.</p>
+<p>І в цей момент просто необхідно спустити пари, розвантажити себе і
+своє життя.</p>
+<p>Тому що триматися тут - тільки гірше.</p>
+<p>І тому ось ця вся мрія про чисте ЖБО, як у рекламі - на мій погляд на
+даний історичний період - просто шкідлива мета.</p>
+<p>Воно, навіть будучи реалізованим - просто нашкодить вам.</p>
+<p>Ні, я пропоную зовсім іншу мету - займатися онанізмом рідше.</p>
+<p>Ось так - банально?! Звісно.</p>
+<p>Але це те, що КРУТО працює, і дає круті результати.</p>
+<p>Тому що коли ви ставите собі таке намірення - ви з часом починаєте
+помічати - так і СПРАВДИ я став займатися ним рідше.</p>
+<p>З банальної причини - онанізм, як і діти, завжди не вчасно.</p>
+<p>Адже щодня треба щось зробити, кудись встигнути, з кимось
+подзвонитися.</p>
+<p>А після онанізму, наприклад, у мене майже завжди розвивається
+безсоння, лежиш і читаєш смартфон половину ночі.</p>
+<p>Не кажучи вже про те, що моє егегей, як у мушкетерів, звучить як по
+блядськи після нього.</p>
+<p>Немає в ньому сили, задора, могутності.</p>
+<p>І ось згадуючи всі ці побічні ефекти, ти зайвий раз думаєш, окей, ну
+займуся я онанізмом, це приємна частина раскладу.</p>
+<p>А потім?</p>
+<p>А тому купа різного лайна, яке взагалі не подобається просто
+ніяк.</p>
+<p>Ти начебто потрапляєш у в’язку трясовину мінімум на півдня, а то й
+більше.</p>
+<p>І ніяк не можеш вийти в жвавий стан, робочий.</p>
+<p>І ось ці всі стани, спогади так не хочеться переживати, що ти
+відкладаєш, відкладаєш, відкладаєш, потім хопа - сексом перехопився,
+потім фігак - вдалий період попер, нічого “заїсти”, і так перекладаєш,
+поки не виявиш - пару місяців накрутив як з куща.</p>
+<p>І ось ця мета - займатися рідше, вона ж взагалі для всіх
+актуальна.</p>
+<p>Ну немає у тебе дівчини, окей.</p>
+<p>Але так побічні ефекти у тебе все ті самі, актуальні для тебе.</p>
+<p>І тому зайвий раз, по суті, не хочеться якось у все це
+впроваджуватися.</p>
+<p>Відкладеш, а потім ще, а потім вирішиш трохи тиск до високого
+підняти, щоб стимул знайти когось був - і ще денек продержишся.</p>
+<p>І у тебе теж з часом почне виходити РІДШЕ.</p>
+<p>Буде йти плавний прогрес.</p>
+<p>І тому адекватне ЖБО - воно перш за все про адекватну мету.</p>
+<p>А онанізм це така річ - що це не алкоголь.</p>
+<p>Це не привнесений наркотик, який бабах, і не п’єш сто років обід, як
+у мене вийшло елементарно, незважаючи на те, що був період, коли я не
+менше 400 днів випивав перед сном поспіль.</p>
+<p>Який перестав пити назавжди і кайфує.</p>
+<p>Онанізм - це річ, яка вбудована в сам організм, як вбудована,
+скажімо, функція походу в туалет.</p>
+<p>Її не можна заблокувати і немає сенсу.</p>
+<p>Тому що поки накопичується те, що має через неї вийти - не слід це
+надмірно стримувати.</p>
+<p>Відпустіть коней.</p>
+<p>І якщо хтось ЗНОВУ згадає, що є ж чернеці, є ж випадки, коли люди
+роками не користувалися онанізмом, то знову ж - я з вами повністю
+згоден.</p>
+<p>Є такі люди, у яких навіть без сексу немає потреб в еякуляціях, або
+вони повністю задовольняються нічними полюціями.</p>
+<p>Але зрозумійте просту річ - це люди або з особливою генетикою, як
+правило, майже асексуального типу, зі зниженою статевою конституцією,
+або чернеці, або жахливі стоики. Один відсоток населення.</p>
+<p>А ви - не з їх числа.</p>
+<p>Ваша система накопичує в собі надлишки, і скидати їх - розумно.</p>
+<p>І тому давайте просто візьмемо адекватне завдання - менше займатися
+онанізмом по мірі можливості.</p>
+<p>Ставити собі завдання не займатися ним взагалі - НЕ варто.</p>
+<p>А ось менше - дуже навіть.</p>
+<p>Адже в кінці кінців ми можемо дійти до стану, коли онанізму іноді
+буде так мало - що ми накопичимо серйозні терміни.</p>
+<p>Але хай для нас завжди буде відкрита можливість підтримати,
+розвантажити себе, своє життя через онанізм, коли ми потребуватимемо в
+цьому.</p>
+<p>Не закривайте ці двері, і якщо навіть у вас і вийде жити без онанізму
+- то й кайф.</p>
+<p>Але хай воно вийде природно, само собою.</p>
+<p>І це буде дуже і дуже добре.</p>
+<p>І ви запитаєте - ну окей.</p>
+<p>Поставили ми собі завдання займатися онанізмом менше.</p>
+<p>Як його вирішити?</p>
+<p>І давайте одразу, одразу відкинемо спроби якось боротися з фізикою
+процесу.</p>
+<p>Хай організм отримує своє, і якщо немає можливості скинути все через
+секс - скидайте через онанізм і будь ласка, не переживайте про це.</p>
+<p>Ви ж не переживаєте, коли ходите в туалет - розумієте необхідність
+цього.</p>
+<p>І саме так само є сенс не переживати про те, що ви іноді займаєтеся
+онанізмом через те, що на рівні фізики вас підперло.</p>
+<p>Повторю думку, яка зараз є КРАЙНЕ непопулярною - в наш час організм у
+99 відсотків людей раз на тиждень вимагатиме скидання надлишків
+насіннєвої рідини, хоч ти вузлом усе закручуй.</p>
+<p>І з цим ми нічого не будемо робити, крім важких тренувань - бігу,
+віджимань, велосипеда, фізичної роботи.</p>
+<p>Чи вирішить це питання?</p>
+<p>Та звісно ні.</p>
+<p>Але день-інший цілком ймовірно вдасться виграти.</p>
+<p>А це вже немало.</p>
+<p>Але в основному, в основному наша робота буде спрямована на те, щоб
+поступово, з роками ставати трошки більш щасливим.</p>
+<p>Хоч би трошки.</p>
+<p>Тому що фізіологічно нас підштовхує до онанізму кожен п’ятий, сьомий,
+десятий день.</p>
+<p>І це, по суті - РІДКО.</p>
+<p>При такій частоті найкраще, що ви можете зробити - знайти дівчину,
+стати майстром взаємин, і у вас одразу лічильник полетить в небеса.</p>
+<p>А ось якщо ви відчуваєте горе, вам дуже дуже погано, то у вас онанізм
+буде щоденний, або раз на два-три дні.</p>
+<p>І навіть при наявності дружини він буде частий, тому що ви будете
+нещасні і вам треба буде якось забутися, відчути радість.</p>
+<p>І тому, в основному вся наша боротьба, вся методика ЖБО зводиться до
+дуже простої речі - спроби займатися онанізмом рідше через ТЕ, що ми
+поступово стаємо менш нещасними.</p>
+<p>Усе - більше в ній немає нічого.</p>
+<p>Це вся методика, і вся ідея.</p>
+<p>Перестань бути нещасним, і ти, будучи самотнім, займатимешся
+онанізмом за фізіологічною відсічкою, раз так у десять днів, а якщо ти
+сімейний - то раз на кілька місяців, коли збіглося купа факторів і тебе
+приперло саме з фізіології.</p>
+<p>І це і є мета, яку можна позначити як ідеал.</p>
+<p>Не повне ЖБО - ні.</p>
+<p>Але настільки значне його скорочення - що ефект від нього матиме сенс
+розглядати під мікроскопом.</p>
+<p>Особливо якщо деякі герої настільки переповняться у своєму щасті, що
+їм навіть порнографія не знадобиться для того, щоб скинути напругу.</p>
+<p>Адже порнографію, як не крути, ми ж і вмикаємо тому, що нещасні.</p>
+<p>Нам мало еякулювати - ми бажаємо круто кайфанути.</p>
+<p>І для цього нам і потрібна ця зміна партнерів, ці відеоролики.</p>
+<p>Ми одразу, за раз, хочемо переспати з десятьма.</p>
+<p>Щоб відволіктися від того болю, який відчуваємо від життя.</p>
+<p>Але важливо зрозуміти - якщо болю не буде, то й відволікатися буде
+від чого.</p>
+<p>Ми буквально зможемо передернути на суху.</p>
+<p>Що знизить усі шкідливі ефекти, включно з кармічними просадками від
+перегляду порно, у десятки разів.</p>
+<p>Не кажучи вже про нереально (без ефекту Куліджа гормональний ефект
+просто смішний, усі рецептори залишаться цілими) зниженої гормональної
+накачки.</p>
+<p>Від якої й йде похмілля, як від п’яного вечора.</p>
+<p>І ось наше завдання, наше реальне завдання.</p>
+<p>Ми дрочимо як не в себе тому що нещасні.</p>
+<p>І поки ми будемо нещасні - будемо продовжувати дрочити.</p>
+<p>І немає жодного способу зупинити онанізм - окрім як привести своє
+життя в настільки якісний стан, щоб бути задоволеним життям.</p>
+<p>Тому що той, хто незадоволений - дрочить.</p>
+<p>А хто задоволений - теж дрочить, але так рідко, що понту враховувати
+це немає.</p>
+<p>І ось наше завдання - перейти до другої категорії.</p>
+<p>Завести дружину, подругу, і стати задоволеним.</p>
+<p>І тоді від онанізму до онанізму буде дві, три тиждні, місяць або
+більше.</p>
+<p>І якось серйозно його враховувати - та понт це.</p>
+<p>Ви ввійдете в режим максимального процвітання і переможете
+питання.</p>
+<p>Рівно настільки, наскільки це питання реально перемогти в нашу
+епоху.</p>
+<p>І так, як загалом зрозуміти - наскільки ти нещасний.</p>
+<p>Елементарно.</p>
+<p>Подивись, як у тебе з основними наркотиками.</p>
+<p>Яких всього-то кілька - це сигарети, алкоголь у першому ряду, їх
+вживають лише люди, які ДУЖЕ серйозно нещасні. Вони прямо в пеклі. Таким
+людям належить ще великий шлях.</p>
+<p>На другому рівні люди, які використовують легші наркотики - чай,
+кава, солодке, відчувають особливо сильну пристрасть до м’яса,
+комп’ютерних ігор. Це люди живуть уже набагато краще. Але за моїми
+розрахунками, вони все ще сильно нещасні, хай і більш щасливі, ніж перша
+категорія.</p>
+<p>І на третьому рівні люди, яких дуже складно спіймати на явній
+наркоті. В ігри не грають, каву не п’ють, їжу їдять просту і мало. І ці
+люди, по факту, вже живуть дуже якісно. Вони цілком готові до того, щоб
+онанізму в їхньому житті ставало все менше і менше. З тієї причини, що
+раз їхнє життя настільки прекрасне, що їм не треба пити і курити, то й
+онанізмом їм доведеться догонятися дуже і дуже рідко.</p>
+<p>І наше завдання, на справах, поступово підбиратися до онанізму,
+думаючи про те, як перестати бути нещасним.</p>
+<p>Досягти стану, коли в нашому житті немає жодних наркотиків, починаючи
+спочатку з розбирань із важкими, і потім перемикаючись на все легші і
+легші. Дійшовши до рівня - коли навіть кава для вас буде жорсткою
+наркотою.</p>
+<p>І коли ми досягнемо стану чистоти - ми вже будемо готові поступово,
+по трохи, з роками вдаватися до онанізму все рідше і рідше.</p>
+<p>Адже той факт, що ми існуємо без наркотиків - говорить про те, що ми
+вже сильно якісно живемо.</p>
+<p>І коли людина живе так якісно - вона вже може піти на головного
+ведмедя гризлі - спробувати відкусити шматок і від онанізму.</p>
+<p>Зайвий раз не піддрочити, ще день продержатися.</p>
+<p>І тим самим дійти до рівня - коли онанізм і є.</p>
+<p>Але його і нема одночасно.</p>
+<p>І пам’ятайте просту річ - онанізм це не причина поганого життя.</p>
+<p>Погане життя - це причина онанізму НЕ з фізіологічних причин.</p>
+<p>І тому онанізм це не проблема, і боротися з ним не треба, навпаки,
+він ваш друг, союзник і побратим.</p>
+<p>Ваша біда - це погане життя.</p>
+<p>Рятуючись від якого ви то закурюєте, то випиваєте, то в ігри
+граєте.</p>
+<p>Вам погано - і доводиться рятуватися.</p>
+<p>Але прибери погане життя - і у тебе залишиться онанізм лише з
+фізіологічних причин.</p>
+<p>З яким боротися все одно що боротися з потребою відвідувати туалет -
+дурна затія.</p>
+<p>Залиште його і не чіпайте.</p>
+<p>А ось з онанізмом, який з’являється в нашому житті з тієї причини, що
+ми нещасні - ще поборемося і зробимо купу крутих речей.</p>
+<p>Але про це вже в наступній частині.</p>
+
+  </main>
+</div>
+
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  var sidebar = document.getElementById('sidebar');
+  var toggle = document.getElementById('sidebar-toggle');
+  if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== toggle) {
+    sidebar.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
